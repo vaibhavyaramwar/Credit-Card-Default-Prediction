@@ -121,3 +121,33 @@ This is a Machine Learning Project which Predicts probability of credit default 
                   git revert <commit to revert>
 
 ```
+
+```
+            Create Dockerfile and provide required details
+            Also create .dockerignore file , this file is required so that docker will ignore the items those are exists in this file
+```
+
+```
+            Login to Heroku and Navigate to account settings Copy the API Secrete key
+```
+
+```
+            Login to github and Navigate to 
+
+                Settings -> Security -> Secrets -> Actions
+
+                Click on New Repository secret and add below secret
+
+                HEROKU_EMAIL
+                HEROKU_API_KEY
+                HEROKU_APP_NAME
+```
+
+```
+            create directory .github\workflows and add main.yaml file in it and provide all required workflow event , jobs , action and runner details
+```
+
+```
+            Now push changes to github and check github actions and check pipline status 
+            Github action will automatically triggers deployment of the Flask Application
+```
