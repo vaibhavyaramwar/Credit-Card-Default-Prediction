@@ -6,4 +6,4 @@ numpy
 PyYAML
 evidently
 dill
-#-e .
+-e .
