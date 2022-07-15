@@ -1,0 +1,12 @@
+training_pipeline_config:
+  pipeline_name: creditdefaulter
+  artifact_dir: artifact
+
+data_ingestion_config:
+  dataset_download_file_name : uciml/default-of-credit-card-clients-dataset
+  raw_data_dir: raw_data
+  extracted_download_dir: extracted_download_dir
+  ingested_dir: ingested_data
+  ingested_train_dir: train
+  ingested_test_dir: test 
+  

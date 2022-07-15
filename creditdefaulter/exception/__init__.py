@@ -25,7 +25,7 @@ class Credit_Card_Default_Exception(Exception):
         return error_message
 
     def __str__(self):
-        self.error_message
+        return str(self.error_message)
 
     def __repr__(self) -> str:
         return Credit_Card_Default_Exception.__name__.str()

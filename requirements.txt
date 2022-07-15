@@ -6,4 +6,6 @@ numpy
 PyYAML
 evidently
 dill
+kaggle
+import-ipynb
 -e .
