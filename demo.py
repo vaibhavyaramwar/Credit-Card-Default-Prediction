@@ -1,8 +1,8 @@
 from creditdefaulter.config.configuration import Configuration
-from creditdefaulter.constant import ROOT_DIR
+from creditdefaulter.constant import *
 import os
-os.environ['KAGGLE_USERNAME'] = "vaibhavyaramwar" # username from the json file
-os.environ['KAGGLE_KEY'] = "d06d519f9650b21805c3e7b5c33e63c9" # key from the json file
+os.environ[KAGGLE_USERNAME] = KAGGLE_USERNAME_VALUE
+os.environ[KAGGLE_KEY] = KAGGLE_KEY_VALUE
 from creditdefaulter.pipeline.pipeline import Pipeline
 from creditdefaulter.logger import logging
 from creditdefaulter.constant import *

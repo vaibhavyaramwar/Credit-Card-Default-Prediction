@@ -34,7 +34,6 @@ class Configuration:
     def get_data_ingestion_config(self) -> DataIngestionConfig:
         try:
             data_ingestion_config_key = self.config_info[DATA_INGESTION_CONFIG_KEY]
-            print(data_ingestion_config_key[DATA_INGESTION_INGESTED_DIR_KEY])
             data_ingestion_artifact_dir = DATA_INGESTION_ARTIFACT_DIR
             data_ingestion_artifact_dir_path = os.path.join(self.training_pipeline_config.artifact_dir,data_ingestion_artifact_dir,self.time_stamp)
             
