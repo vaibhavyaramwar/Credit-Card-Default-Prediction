@@ -1,6 +1,6 @@
 from creditdefaulter.constant import * 
 from creditdefaulter.util import util
-from creditdefaulter.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig 
+from creditdefaulter.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig
 from creditdefaulter.exception import Credit_Card_Default_Exception
 from creditdefaulter.logger import logging
 import sys
@@ -61,3 +61,32 @@ class Configuration:
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
+
+    def get_data_validation_config(self) -> DataValidationConfig:
+        try:
+            data_validation_config_key = self.config_info[DATA_VALIDATION_CONFIG_KEY]
+            data_validation_artifact_dir = DATA_VALIDATION_ARTIFACT_DIR_NAME
+            data_validation_artifact_dir_path = os.path.join(self.training_pipeline_config.artifact_dir,data_validation_artifact_dir,self.time_stamp)
+
+            schema_dir = data_validation_config_key[DATA_VALIDATION_SCHEMA_DIR_KEY]
+            schema_dir_file = data_validation_config_key[DATA_VALIDATION_SCHEMA_FILE_NAME_KEY]
+            schema_file_path = os.path.join(schema_dir,schema_dir_file)
+
+            report_file_name = data_validation_config_key[DATA_VALIDATION_REPORT_FILE_NAME_KEY]
+            report_file_name_path = os.path.join(data_validation_artifact_dir_path,report_file_name)
+
+            report_page_file_name = data_validation_config_key[DATA_VALIDATION_REPORT_FILE_PATH_NAME_KEY]
+            report_page_file_name_path = os.path.join(data_validation_artifact_dir_path,report_page_file_name)
+
+            data_validation_config = DataValidationConfig(artifact_dir_path=data_validation_artifact_dir_path,
+                                                            schema_dir=schema_dir,
+                                                            schema_file_path=schema_file_path,
+                                                            report_file_name_path=report_file_name_path,
+                                                            report_page_file_path_name=report_page_file_name_path)
+
+            logging.info(f"Data Validation Config : {[data_validation_config]}")
+
+            return data_validation_config
+
+        except Exception as e:
+            raise Credit_Card_Default_Exception(e,sys) from e
