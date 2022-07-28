@@ -1,3 +1,4 @@
+from creditdefaulter.component.data_transformation import DataTransformation
 from creditdefaulter.component.data_validation import DataValidation
 from creditdefaulter.logger import logging
 from creditdefaulter.exception import Credit_Card_Default_Exception
@@ -31,10 +32,26 @@ class Pipeline:
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
+    def start_data_transformation(self,data_ingestion_artifact:DataIngestionArtifact,
+                                        data_validation_artifact:DataValidationArtifact) -> DataTransformationArtifact:
+        try:
+            data_transformation_config = self.configuration.get_data_transformation_config()
+            data_transformation = DataTransformation(data_transformation_config=data_transformation_config,
+                                                        data_ingestion_artifact=data_ingestion_artifact,
+                                                        data_validation_artifact=data_validation_artifact)
+
+            return data_transformation.initiate_data_transformation()
+
+        except Exception as e:
+            raise Credit_Card_Default_Exception(e,sys) from e  
+
     def run_pipeline(self):
         try:          
             dataIngestionArtifact = self.start_data_ingestion()
-            dataIngestionArtifact =  self.start_data_validation(data_ingestion_artifact=dataIngestionArtifact)
+            dataValidationArtifact =  self.start_data_validation(data_ingestion_artifact=dataIngestionArtifact)
+            dataTransformationArtifact = self.start_data_transformation(data_ingestion_artifact= dataIngestionArtifact,
+                                                                        data_validation_artifact= dataValidationArtifact)
+
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 

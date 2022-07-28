@@ -85,8 +85,8 @@ class DataIngestion:
             strat_test_df = None
 
             for train_index,test_index in split.split(credit_card_defaulter,credit_card_defaulter[TARGET_COLUMN_NAME]):
-                strat_train_df = credit_card_defaulter.iloc[train_index].drop([TARGET_COLUMN_NAME],axis=1)
-                strat_test_df = credit_card_defaulter.iloc[test_index].drop([TARGET_COLUMN_NAME],axis=1)
+                strat_train_df = credit_card_defaulter.iloc[train_index]
+                strat_test_df = credit_card_defaulter.iloc[test_index]
 
             train_file_path = os.path.join(self.data_ingestion_config.ingested_train_dir,file_name)
             test_file_path = os.path.join(self.data_ingestion_config.ingested_test_dir,file_name)

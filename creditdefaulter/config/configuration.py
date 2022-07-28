@@ -1,6 +1,6 @@
 from creditdefaulter.constant import * 
 from creditdefaulter.util import util
-from creditdefaulter.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig
+from creditdefaulter.entity.config_entity import DataTransformationConfig, TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig
 from creditdefaulter.exception import Credit_Card_Default_Exception
 from creditdefaulter.logger import logging
 import sys
@@ -87,6 +87,32 @@ class Configuration:
             logging.info(f"Data Validation Config : {[data_validation_config]}")
 
             return data_validation_config
+
+        except Exception as e:
+            raise Credit_Card_Default_Exception(e,sys) from e
+
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        try:
+            artifact_dir =  self.training_pipeline_config.artifact_dir
+            data_transformation_config = self.config_info[DATA_TRANSFORMATION_CONFIG_KEY]
+            artifact_dir_path = os.path.join(artifact_dir,DATA_TRANSFORMATION_ARTIFACT_DIR,self.time_stamp)
+
+            transformed_dir = data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY]
+
+            transformed_train_dir = os.path.join(artifact_dir_path,transformed_dir,data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY])
+            transformed_test_dir = os.path.join(artifact_dir_path,transformed_dir,data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY]) 
+
+            processing_dir = data_transformation_config[DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY]
+            preprocessed_object_file_name = os.path.join(artifact_dir_path,processing_dir,data_transformation_config[DATA_TRANSFORMATION_PREPROCESSED_OBJECT_FILE_NAME_KEY])
+
+            data_transformation_config = DataTransformationConfig(artifact_dir_path=artifact_dir_path,
+                                                                    transformed_train_dir=transformed_train_dir,
+                                                                    transformed_test_dir=transformed_test_dir,
+                                                                    preprocessed_object_file_name=preprocessed_object_file_name)
+
+            logging.info(f"Data Transformation Config : {[data_transformation_config]}")
+
+            return data_transformation_config
 
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
