@@ -30,6 +30,13 @@ def save_numpy_arr_data(file_path:str,numpy_arr:np.array):
     except Exception as e:
         raise Credit_Card_Default_Exception(e,sys) from e
 
+def load_numpy_arr_data(file_path:str):
+    try:
+        with open(file_path,"rb") as file_obj:
+            return np.load(file_obj)
+    except Exception as e:
+        raise Credit_Card_Default_Exception(e,sys) from e
+
 def save_obj(file_path:str,obj):
     try:
         
@@ -41,3 +48,11 @@ def save_obj(file_path:str,obj):
 
     except Exception as e:
         raise Credit_Card_Default_Exception(e,sys) from e
+
+def load_obj(file_path:str):
+    try:
+        with open(file_path,"rb") as file_obj:
+            return dill.load(file_obj)
+    except Exception as e:
+        raise Credit_Card_Default_Exception(e,sys) from e
+

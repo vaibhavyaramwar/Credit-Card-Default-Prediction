@@ -1,6 +1,7 @@
+from email.mime import base
 from creditdefaulter.constant import * 
 from creditdefaulter.util import util
-from creditdefaulter.entity.config_entity import DataTransformationConfig, TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig
+from creditdefaulter.entity.config_entity import DataTransformationConfig, TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,ModelTrainerConfig
 from creditdefaulter.exception import Credit_Card_Default_Exception
 from creditdefaulter.logger import logging
 import sys
@@ -116,3 +117,29 @@ class Configuration:
 
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
+
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        try:
+            artifact_dir_path = os.path.join(self.training_pipeline_config.artifact_dir,MODEL_TRAINER_ARTIFACT_DIR,self.time_stamp)
+            model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
+            trained_model_dir = model_trainer_config[trained_model_dir]
+            model_File_name = model_trainer_config[model_File_name]
+            base_accuracy = model_trainer_config[base_accuracy]
+            model_config_dir = model_trainer_config[model_config_dir]
+            model_config_file_name = model_trainer_config[model_config_file_name]
+ 
+            trained_model_dir_file_path = os.path.join(artifact_dir_path,trained_model_dir,model_File_name)
+            model_config_dir_file_path = os.path.join(artifact_dir_path,model_config_dir,model_config_file_name)
+
+            modelTrainerConfig = ModelTrainerConfig(artifact_dir_path=artifact_dir_path,trained_model_dir_file_path=trained_model_dir_file_path,
+                                                        base_accuracy=base_accuracy,model_config_dir_file_path=model_config_dir_file_path)
+
+            logging.info(f"Model Trainer Config : {[modelTrainerConfig]}")
+
+            return modelTrainerConfig
+
+        except Exception as e:
+            raise Credit_Card_Default_Exception(e,sys) from e
+
+
+    

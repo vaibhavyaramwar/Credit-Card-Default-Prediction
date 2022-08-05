@@ -78,3 +78,26 @@ DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY = "preprocessing_dir"
 DATA_TRANSFORMATION_PREPROCESSED_OBJECT_FILE_NAME_KEY = "preprocessed_object_file_name"
 
 CATEGORICAL_COLUMN_THRESHOLD =  0.05
+
+# MODEL TRAINING
+
+MODEL_TRAINER_ARTIFACT_DIR = "model_trainer"
+MODEL_TRAINER_CONFIG_KEY="model_trainer_config"
+TRAINED_MODEL_DIR_KEY="trained_model_dir"
+MODEL_FILE_NAME_KEY="model_File_name"
+BASE_ACCURACY_KEY="base_accuracy"
+MODEL_CONFIG_DIR_KEY="model_config_dir"
+MODEL_CONFIG_FILE_NAME_KEY="model_config_file_name"
+
+
+# MODEL Yaml CONSTANT
+
+GRID_SEARCH_CONFIG_KEY = "grid_search"
+GRID_SEARCH_CLASS_KEY = "class"
+GRID_SEARCH_MODULE_KEY = "module"
+GRID_SEARCH_PARAMS_KEY = "params"
+MODEL_SELECTION_KEY = "model_selection"
+MODEL_SELECTION_PARAMS_KEY = "params"
+MODEL_SELECTION_SEARCH_PARAM_GRID_KEY = "search_param_grid"
+
+
