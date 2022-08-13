@@ -22,13 +22,14 @@ class ModelTrainer:
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
-    def initiate_model_trainer(self,) -> ModelTrainerArtifact:
+    def initiate_model_trainer(self) -> ModelTrainerArtifact:
         try:
             transformed_train_dir = self.data_transformation_artifact.transformed_train_dir
             transformed_test_dir = self.data_transformation_artifact.transformed_test_dir
             
             train_array = util.load_numpy_arr_data(file_path=transformed_train_dir)
             test_array = util.load_numpy_arr_data(file_path=transformed_test_dir)
+            logging.info( train_array)
 
             X_train,y_train,X_test,y_test = train_array[:,:-1],train_array[:,-1],test_array[:,:-1],test_array[:,-1]
 
@@ -44,7 +45,7 @@ class ModelTrainer:
 
             model_list = [model.best_model for model in grid_searched_best_model_list]
 
-            metricInfoArtifact:MetricInfoArtifact = model_factory.evaluate_classification_model(model_list,X_train,y_train, X_test,y_test,base_accuracy)
+            metricInfoArtifact:MetricInfoArtifact = ModelFactory.evaluate_classification_model(model_list,X_train,y_train, X_test,y_test,base_accuracy)
 
             processed_obj = util.load_obj(self.data_transformation_artifact.preprocessed_object_file_name)
             model_obj = metricInfoArtifact.model_object
@@ -57,6 +58,7 @@ class ModelTrainer:
 
             modelTrainerArtifact = ModelTrainerArtifact(is_trained = True,
                                                             message = "Model Training Successful",
+                                                            trained_model_file_path = trained_model_file_path,
                                                             model_name = metricInfoArtifact.model_name,
                                                             model_object = metricInfoArtifact.model_object,
                                                             train_accuracy = metricInfoArtifact.train_accuracy,

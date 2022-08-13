@@ -1,7 +1,7 @@
 from email.mime import base
 from creditdefaulter.constant import * 
 from creditdefaulter.util import util
-from creditdefaulter.entity.config_entity import DataTransformationConfig, TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,ModelTrainerConfig
+from creditdefaulter.entity.config_entity import DataTransformationConfig, ModelEvaluationConfig, ModelPusherConfig, TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,ModelTrainerConfig
 from creditdefaulter.exception import Credit_Card_Default_Exception
 from creditdefaulter.logger import logging
 import sys
@@ -122,14 +122,14 @@ class Configuration:
         try:
             artifact_dir_path = os.path.join(self.training_pipeline_config.artifact_dir,MODEL_TRAINER_ARTIFACT_DIR,self.time_stamp)
             model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
-            trained_model_dir = model_trainer_config[trained_model_dir]
-            model_File_name = model_trainer_config[model_File_name]
-            base_accuracy = model_trainer_config[base_accuracy]
-            model_config_dir = model_trainer_config[model_config_dir]
-            model_config_file_name = model_trainer_config[model_config_file_name]
+            trained_model_dir = model_trainer_config[TRAINED_MODEL_DIR_KEY]
+            model_File_name = model_trainer_config[MODEL_FILE_NAME_KEY]
+            base_accuracy = model_trainer_config[BASE_ACCURACY_KEY]
+            model_config_dir = model_trainer_config[MODEL_CONFIG_DIR_KEY]
+            model_config_file_name = model_trainer_config[MODEL_CONFIG_FILE_NAME_KEY]
  
             trained_model_dir_file_path = os.path.join(artifact_dir_path,trained_model_dir,model_File_name)
-            model_config_dir_file_path = os.path.join(artifact_dir_path,model_config_dir,model_config_file_name)
+            model_config_dir_file_path = os.path.join(CONFIG_DIR,model_config_file_name)
 
             modelTrainerConfig = ModelTrainerConfig(artifact_dir_path=artifact_dir_path,trained_model_dir_file_path=trained_model_dir_file_path,
                                                         base_accuracy=base_accuracy,model_config_dir_file_path=model_config_dir_file_path)
@@ -141,5 +141,32 @@ class Configuration:
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        try:
+            model_evaluation_config = self.config_info[MODEL_EVALUATION_CONFIG_KEY]
+            artifact_dir_path = os.path.join(self.training_pipeline_config.artifact_dir,MODEL_EVALUATION_ARTIFACT_DIR)
+            model_evaluation_file_name_path = os.path.join(artifact_dir_path,model_evaluation_config[MODEL_EVALUATION_FILE_NAME_KEY])
+            modelEvaluationConfig = ModelEvaluationConfig(model_evaluation_file_name_path=model_evaluation_file_name_path,
+                                                            time_stamp=self.time_stamp)
 
+            logging.info(f"Model Evaluation Config : {[modelEvaluationConfig]}")
+            
+            return modelEvaluationConfig
+
+        except Exception as e:
+            raise Credit_Card_Default_Exception(e,sys) from e
     
+    def get_model_pusher_config(self) -> ModelPusherConfig:
+        try:
+            time_stamp = f"{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            model_pusher_config = self.config_info[MODEL_PUSHER_CONFIG_KEY]
+            export_dir = model_pusher_config[MODEL_PUSHER_EXPORT_DIR_KEY]
+
+            modelPusherConfig = ModelPusherConfig(export_dir_path=os.path.join(ROOT_DIR,export_dir,time_stamp))
+
+            logging.info(f"Model Pusher Config : {[modelPusherConfig]}")
+
+            return modelPusherConfig
+
+        except Exception as e:
+            raise Credit_Card_Default_Exception(e,sys) from e

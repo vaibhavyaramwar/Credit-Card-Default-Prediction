@@ -8,6 +8,11 @@ CONFIG_FILE_PATH = os.path.join(ROOT_DIR,CONFIG_DIR,CONFIG_FILE)
 
 CURRENT_TIME_STAMP = f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
 
+
+def get_current_time_stamp():
+    return f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
+
+
 # Kaggle Variables
 
 KAGGLE_USERNAME = "KAGGLE_USERNAME"
@@ -37,10 +42,12 @@ DATA_INGESTION_INGESTED_DIR_TEST_DIR_KEY = "ingested_test_dir"
 
 TARGET_COLUMN_NAME = "default.payment.next.month"
 
-
 # IMBALANCED THRESHOLD
 
 IMBALANCED_THRESHOLD = 0.2
+
+HOUSING_DATA_KEY = "credit_card_data"
+MEDIAN_HOUSING_VALUE_KEY = "default_payment_next_month"
 
 
 # Data Validation related variables
@@ -61,6 +68,7 @@ DATA_VALIDATION_DATA_DRIFT_DATA_METRICS_DATASETDRIFT_KEY = "dataset_drift"
 
 TOTAL_COLUMNS = 25
 
+COLUMNS_KEY = 'columns'
 COLUMNS_ORDER_KEY = 'columns_order'
 DOMAIN_VALUE_KEY = 'domain_value'
 CATEGORICAL_COLUMNS_KEY = 'categorical_columns'
@@ -100,4 +108,36 @@ MODEL_SELECTION_KEY = "model_selection"
 MODEL_SELECTION_PARAMS_KEY = "params"
 MODEL_SELECTION_SEARCH_PARAM_GRID_KEY = "search_param_grid"
 
+
+# MODEL EVALUATION
+
+MODEL_EVALUATION_ARTIFACT_DIR = "model_evaluation"
+MODEL_EVALUATION_CONFIG_KEY = "model_evaluation_config"
+MODEL_EVALUATION_FILE_NAME_KEY = "model_evaluation_file_name"
+
+SAVED_MODELS_DIR_NAME = "saved_models"
+MODEL_DIR = os.path.join(ROOT_DIR, SAVED_MODELS_DIR_NAME)
+
+
+
+BEST_MODEL_KEY = "best_model"
+HISTORY_KEY = "history"
+MODEL_PATH_KEY = "model_path"
+
+
+# MODEL PUSHER
+
+MODEL_PUSHER_CONFIG_KEY = "model_pusher_config"
+MODEL_PUSHER_EXPORT_DIR_KEY = "model_export_dir"
+
+
+
+EXPERIMENT_DIR_NAME="experiment"
+EXPERIMENT_FILE_NAME="experiment.csv"
+
+
+LOG_FOLDER_NAME = "logs"
+
+
+MODEL_CONFIG_FILE_PATH = os.path.join(ROOT_DIR, CONFIG_DIR, "model.yaml")
 

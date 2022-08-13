@@ -6,7 +6,7 @@ grid_search:
     verbose: 2
 model_selection:
   module_0:
-    class: LinearRegression
+    class: LogisticRegression
     module: sklearn.linear_model
     params:
       fit_intercept: true
@@ -14,11 +14,15 @@ model_selection:
       fit_intercept:
       - true
       - false
-  module_1:
-    class: RandomForestRegressor
-    module: sklearn.ensemble
-    params:
-      min_samples_leaf: 3
-    search_param_grid:
-      min_samples_leaf:
-      - 6
+      #penalty:
+      #- l1
+      #- l2
+      #- elasticnet
+      #- none
+      C:
+      - 0.001
+      - 0.01
+      - 0.1
+      - 1
+      - 10
+      - 100

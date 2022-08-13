@@ -44,7 +44,7 @@ class ModelFactory:
 
     def __init__(self,model_config_path:str = None):
         try:
-            self.model_config = util.read_yaml_file(self.model_config_path)
+            self.model_config = util.read_yaml_file(model_config_path)
             
             self.grid_search_class:str = self.model_config[GRID_SEARCH_CONFIG_KEY][GRID_SEARCH_CLASS_KEY]
             
@@ -78,7 +78,7 @@ class ModelFactory:
 
         try:
 
-            if not isinstance(property_details) == dict:
+            if not isinstance(property_details,dict):
                 raise Exception("To update property details in object need property details in the form of dictionary")
         
             for key,value in property_details.items():
@@ -95,7 +95,8 @@ class ModelFactory:
             
             for model_serial_no in self.model_initialization_config.keys():
                 model_initalization_config = self.model_initialization_config[model_serial_no]
-                model_obj_ref = self.get_class_ref_from_name(self.grid_search_module,self.grid_search_class)
+                model_obj_ref = self.get_class_ref_from_name(module_name=model_initalization_config[GRID_SEARCH_MODULE_KEY],
+                                                            class_name=model_initalization_config[GRID_SEARCH_CLASS_KEY])
                 model = model_obj_ref()
 
                 if GRID_SEARCH_PARAMS_KEY in self.model_initialization_config:
@@ -163,6 +164,7 @@ class ModelFactory:
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
+    @staticmethod
     def get_best_model_from_grid_Search_best_model_list(GridSearchBestModellist : List[GridSearchBestModel],best_accuracy) -> BestModel:
         try:
             best_model = None
@@ -193,20 +195,24 @@ class ModelFactory:
             gridSearchBestModellist = self.initiate_best_parameter_search_for_best_models(initialized_model_list=initialized_model_list,
                                                                     input_feature=X,
                                                                         output_feature=y)
-
-            return self.get_best_model_from_grid_Search_best_model_list(GridSearchBestModellist = gridSearchBestModellist,
-                                                                            best_accuracy = best_accuracy)
+            logging.info(f"gridSearchBestModellist : {gridSearchBestModellist}")
+            return ModelFactory.get_best_model_from_grid_Search_best_model_list(GridSearchBestModellist = gridSearchBestModellist,best_accuracy = best_accuracy)
 
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
-    def evaluate_classification_model(self,model_list:list,X_train:np.array,y_train:np.array, X_test:np.array,y_test:np.array,base_accuracy:float= 0.6) -> MetricInfoArtifact:
+    def evaluate_classification_model(model_list:list,X_train:np.array,y_train:np.array, X_test:np.array,y_test:np.array,base_accuracy:float= 0.6) -> MetricInfoArtifact:
         try:
             index_number = 0
             metricInfoArtifact = None
 
+            print("evaluate_classification_model model_list : ",model_list)
             for model in model_list:
-                model_name = str(model)  #getting model name based on model object
+                
+                logging.info(f"{'>>'*30}Started evaluating model: [{type(model).__name__}] {'<<'*30}")
+                
+                print(model,type(model))
+
                 y_train_pred = model.predict(X_train)
                 y_test_pred = model.predict(X_test)
 
@@ -233,7 +239,7 @@ class ModelFactory:
 
                 if model_accuracy >= base_accuracy and diff_test_train_acc <= 0.05:
                     base_accuracy = model_accuracy
-
+                    model_name = str(model)  #getting model name based on model object
                     metricInfoArtifact = MetricInfoArtifact(model_name = model_name, 
                                                             model_object = model, 
                                                             train_accuracy = train_accuracy, 

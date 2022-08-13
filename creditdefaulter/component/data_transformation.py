@@ -28,7 +28,7 @@ class OutlierImputationTransformation(BaseEstimator,TransformerMixin):
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
-    def fit(self,training_df,y):
+    def fit(self,training_df,y=None):
         try:
             for feature in training_df.columns:
                 q1=np.percentile(a=training_df[feature],q=25)
@@ -68,7 +68,7 @@ class CategoricalCategoryTransformation(BaseEstimator,TransformerMixin):
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
-    def fit(self,X,y):
+    def fit(self,X,y=None):
         try:
             for feature in X.columns:
                 self.mode_details[feature] = statistics.mode(X[feature])
@@ -114,14 +114,15 @@ class DataTransformation:
             numerical_columns = schema_details[NUMERICAL_COLUMN_KEY]
             categorical_columns = schema_details[CATEGORICAL_COLUMNS_KEY]
 
-            num_pipeline = Pipeline(steps=[#('imputer',SimpleImputer(strategy="median")),
-                                            ('outlier',OutlierImputationTransformation()),
-                                            ('scaler',StandardScaler()),
-                                            ('powerTransformer',PowerTransformer(method="yeo-johnson"))
+            num_pipeline = Pipeline(steps=[('imputer',SimpleImputer(strategy="median")),
+                                           # ('outlier',OutlierImputationTransformation()),
+                                            ('scaler',StandardScaler())
+                                          #  ('powerTransformer',PowerTransformer(method="yeo-johnson"))
                                     ])
 
-            cat_pipeline = Pipeline(steps=[("categoricalCategoryTransformation",CategoricalCategoryTransformation()),
-                                           ('oneHotEncoder',OneHotEncoder(handle_unknown="ignore")),
+            cat_pipeline = Pipeline(steps=[#("categoricalCategoryTransformation",CategoricalCategoryTransformation()),
+                                            ('impute', SimpleImputer(strategy="most_frequent")),
+                                            ('oneHotEncoder',OneHotEncoder(handle_unknown="ignore")),
                                            ('scaling',StandardScaler(with_mean=False))
                                     ])
 
@@ -167,10 +168,10 @@ class DataTransformation:
 
             target_column_name = TARGET_COLUMN_NAME
 
-            input_feature_train_df = train_df.drop([target_column_name],axis=1)
+            input_feature_train_df = train_df.drop(columns=[target_column_name],axis=1)
             target_feature_train_df = train_df[target_column_name]
 
-            input_feature_test_df = test_df.drop([target_column_name],axis=1)
+            input_feature_test_df = test_df.drop(columns=[target_column_name],axis=1)
             target_feature_test_df = test_df[target_column_name]
 
            # outlierImputationTransformation = OutlierImputationTransformation()
@@ -178,8 +179,17 @@ class DataTransformation:
            # trans_train_df = outlierImputationTransformation.transform(input_feature_train_df)
            # trans_test_df = outlierImputationTransformation.transform(input_feature_test_df)
 
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df,target_feature_train_df)
+            logging.info(f"input_feature_train_df : {input_feature_train_df}")
+            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
+
+            logging.info(f"input_feature_train_arr : {input_feature_train_arr}")
+
+            train_arr = np.c_[ input_feature_train_arr, np.array(target_feature_train_df)]
+
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
+
+            logging.info(f"input_feature_train_arr:{input_feature_train_arr}")
 
             train_file_path = os.path.basename(train_file_path).replace(".csv",".npz")
             test_file_path = os.path.basename(test_file_path).replace(".csv",".npz")
@@ -190,8 +200,8 @@ class DataTransformation:
             transformed_train_file_path = os.path.join(transformed_train_dir,train_file_path) 
             transformed_test_file_path = os.path.join(transformed_test_dir,test_file_path)
 
-            util.save_numpy_arr_data(transformed_train_file_path,input_feature_train_arr)
-            util.save_numpy_arr_data(transformed_test_file_path,input_feature_test_arr)
+            util.save_numpy_arr_data(transformed_train_file_path,train_arr)
+            util.save_numpy_arr_data(transformed_test_file_path,test_arr)
 
             preprocessing_obj_file_path = self.data_transformation_config.preprocessed_object_file_name
 
