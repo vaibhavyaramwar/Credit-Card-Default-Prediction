@@ -29,7 +29,7 @@ class ModelTrainer:
             
             train_array = util.load_numpy_arr_data(file_path=transformed_train_dir)
             test_array = util.load_numpy_arr_data(file_path=transformed_test_dir)
-            logging.info( train_array)
+            #logging.info( train_array)
 
             X_train,y_train,X_test,y_test = train_array[:,:-1],train_array[:,-1],test_array[:,:-1],test_array[:,-1]
 

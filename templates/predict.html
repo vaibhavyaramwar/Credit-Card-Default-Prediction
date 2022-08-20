@@ -1,0 +1,292 @@
+{% extends 'header.html' %}
+
+{% block head %}
+
+
+<title>Credit Card Defaulter Estimator</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6 col-sm-12 col-xs-6 col-lg-6">
+
+
+        <form action="/predict" method="post">
+            <legend>Housing Estimation Form</legend>
+            <div class="mb-3">
+                <label class="form-label">limit_bal</label>
+                <input class="form-control" type="text" name="limit_bal" placeholder="Enter a value of limit_bal"
+                    required />
+            </div>
+           
+            <div class="mb-3">
+                <label class="form-label">sex</label>
+                <select class="form-control" name="sex" placeholder="Enter a value of sex"
+                    required>
+                    <option value="1">
+                        &lt;1
+                    </option>
+                    <option value="2">
+                        2
+                    </option>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">education</label>
+                <select class="form-control" name="education" placeholder="Enter a value of education"
+                    required>
+                    <option value="1">
+                        &lt;1
+                    </option>
+                    <option value="2">
+                        2
+                    </option>
+                    <option value="3">
+                        3
+                    </option>
+                    <option value="4">
+                        4
+                    </option>
+                    <option value="5">
+                        5
+                    </option>
+                    <option value="6">
+                        6
+                    </option>
+            </div>
+           
+            <div class="mb-3">
+                <label class="form-label">marriage</label>
+                <select class="form-control" name="marriage" placeholder="Enter a value of marriage"
+                    required>
+                    <option value="1">
+                        &lt;1
+                    </option>
+                    <option value="2">
+                        2
+                    </option>
+                    <option value="3">
+                        3
+                    </option>
+            </div>
+            
+            
+            <div class="mb-3">
+                <label class="form-label">age</label>
+                <input class="form-control" type="text" name="age"
+                    placeholder="Enter a value of age" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">pay_0</label>
+                <input class="form-control" type="text" name="pay_0" placeholder="Enter a value of pay_0"
+                    required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">pay_2</label>
+                <input class="form-control" type="text" name="pay_2" placeholder="Enter a value of pay_2"
+                    required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">pay_3</label>
+                <input class="form-control" type="text" name="pay_3"
+                    placeholder="Enter a value of pay_3" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">pay_4</label>
+                <select class="form-control" name="pay_4" placeholder="Enter a value of pay_4"
+                    required>
+
+                    <option value="<1H OCEAN">
+                        &lt;1H OCEAN
+                    </option>
+                    <option value="INLAND">
+                        INLAND
+                    </option>
+                    <option value="NEAR BAY">
+                        NEAR BAY
+                    </option>
+                    <option value="NEAR OCEAN">
+                        NEAR OCEAN
+                    </option>
+                    <option value="ISLAND">
+                        ISLAND
+                    </option>
+
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">pay_5</label>
+                <select class="form-control" name="pay_5" placeholder="Enter a value of pay_5"
+                    required>
+
+                    <option value="<1H OCEAN">
+                        &lt;1H OCEAN
+                    </option>
+                    <option value="INLAND">
+                        INLAND
+                    </option>
+                    <option value="NEAR BAY">
+                        NEAR BAY
+                    </option>
+                    <option value="NEAR OCEAN">
+                        NEAR OCEAN
+                    </option>
+                    <option value="ISLAND">
+                        ISLAND
+                    </option>
+
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">pay_6</label>
+                <select class="form-control" name="pay_6" placeholder="Enter a value of pay_6"
+                    required>
+
+                    <option value="<1H OCEAN">
+                        &lt;1H OCEAN
+                    </option>
+                    <option value="INLAND">
+                        INLAND
+                    </option>
+                    <option value="NEAR BAY">
+                        NEAR BAY
+                    </option>
+                    <option value="NEAR OCEAN">
+                        NEAR OCEAN
+                    </option>
+                    <option value="ISLAND">
+                        ISLAND
+                    </option>
+
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">bill_amt1</label>
+                <input class="form-control" type="text" name="bill_amt1" placeholder="Enter a value of bill_amt1"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">bill_amt2</label>
+                <input class="form-control" type="text" name="bill_amt2" placeholder="Enter a value of bill_amt2"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">bill_amt3</label>
+                <input class="form-control" type="text" name="bill_amt3" placeholder="Enter a value of bill_amt3"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">bill_amt4</label>
+                <input class="form-control" type="text" name="bill_amt4" placeholder="Enter a value of bill_amt4"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">bill_amt5</label>
+                <input class="form-control" type="text" name="bill_amt5" placeholder="Enter a value of bill_amt5"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">bill_amt6</label>
+                <input class="form-control" type="text" name="bill_amt6" placeholder="Enter a value of bill_amt6"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">pay_amt1</label>
+                <input class="form-control" type="text" name="pay_amt1" placeholder="Enter a value of pay_amt1"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">pay_amt2</label>
+                <input class="form-control" type="text" name="pay_amt2" placeholder="Enter a value of pay_amt2"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">pay_amt3</label>
+                <input class="form-control" type="text" name="pay_amt3" placeholder="Enter a value of pay_amt3"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">pay_amt4</label>
+                <input class="form-control" type="text" name="pay_amt4" placeholder="Enter a value of pay_amt4"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">pay_amt5</label>
+                <input class="form-control" type="text" name="pay_amt5" placeholder="Enter a value of pay_amt5"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">pay_amt6</label>
+                <input class="form-control" type="text" name="pay_amt6" placeholder="Enter a value of pay_amt6"
+                    required />
+            </div>
+
+            <div class="mb-3">
+
+                <input class="btn btn-primary" type="submit" value="Predict Median House Value" required />
+            </div>
+
+        </form>
+    </div>
+
+    <div class="col-md-6 col-sm-12 col-xs-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+              California housing price
+            </div>
+            <div class="card-body">
+        {% if context['housing_data'] is not none %}
+        <table class="table table-striped">
+            <caption>Califoria Housing Prediction </caption>
+            <tr>
+                <th>Input Feature</th>
+                <th>Feature Value</th>
+
+            </tr>
+            {% for column,value in context['housing_data'].items() %}
+
+
+
+            <tr>
+                <td>{{column}}</td>
+                <td>{{value[0]}}</td>
+            </tr>
+
+            {% endfor %}
+            <tr>
+
+                <td>median_house_value </td>
+                <td>
+                    {{ context['median_house_value'] }}
+                </td>
+            </tr>
+        </table>
+
+        {% else %}
+       
+              <h5 class="card-title">Submit Form</h5>
+              <p class="card-text">Kindly provide necessary information to estimate housing price in california</p>
+            
+         
+
+        {% endif %}
+        Go to <a href="/" class="btn btn-primary">Home</a>
+    </div>
+</div>
+    </div>
+
+    {% endblock %}

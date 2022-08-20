@@ -68,7 +68,7 @@ def view_experiment_history():
     context = {"experiment":experiment_status.to_html(classes="table table-striped col-12")}
     return render_template("experiment_history.html",context=context)
     
-@app.route("/train",methods["GET","POST"])
+@app.route("/train",methods=["GET","POST"])
 def train():
     message = ""
 
@@ -98,7 +98,6 @@ def predict():
     }
 
     if request.method == "POST":
-        id = int(request.form["id"])
         limit_bal = float(request.form["limit_bal"])
         sex = str(request.form["sex"])
         education = str(request.form["education"])
@@ -123,11 +122,11 @@ def predict():
         pay_amt5 = float(request.form["pay_amt5"])
         pay_amt6 = float(request.form["pay_amt6"])
 
-        creditCardData = CreditCardData(id = id,limit_bal = limit_bal,sex = sex,
+        creditCardData = CreditCardData(limit_bal = limit_bal,sex = sex,
                         education = education,marriage = marriage,age = age,
                         pay_0 = pay_0,pay_2 = pay_2,pay_3 = pay_3,
                         pay_4 = pay_4,pay_5 = pay_5,pay_6 = pay_6,
-                        bill_amt1 = bill_amt1,bill_amt2 = bill_amt1,bill_amt3 = bill_amt3,
+                        bill_amt1 = bill_amt1,bill_amt2 = bill_amt2,bill_amt3 = bill_amt3,
                         bill_amt4 = bill_amt4,bill_amt5 = bill_amt5,bill_amt6 = bill_amt6,
                         pay_amt1 = pay_amt1,pay_amt2 = pay_amt2,pay_amt3 = pay_amt3,
                         pay_amt4 = pay_amt4,pay_amt5 = pay_amt5,pay_amt6 = pay_amt6)

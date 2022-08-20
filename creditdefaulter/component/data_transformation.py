@@ -9,6 +9,9 @@ from sklearn.base import BaseEstimator,TransformerMixin
 from sklearn.preprocessing import OneHotEncoder,StandardScaler,PowerTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
+from sklearn.feature_selection import SelectKBest, SelectFromModel,chi2,f_classif,mutual_info_classif
+from imblearn.over_sampling import SMOTE,SMOTENC
+from imblearn.pipeline import Pipeline
 
 from collections import namedtuple
 import pandas as pd
@@ -114,20 +117,24 @@ class DataTransformation:
             numerical_columns = schema_details[NUMERICAL_COLUMN_KEY]
             categorical_columns = schema_details[CATEGORICAL_COLUMNS_KEY]
 
-            num_pipeline = Pipeline(steps=[('imputer',SimpleImputer(strategy="median")),
-                                           # ('outlier',OutlierImputationTransformation()),
-                                            ('scaler',StandardScaler())
-                                          #  ('powerTransformer',PowerTransformer(method="yeo-johnson"))
+            num_pipeline = Pipeline(steps=[#('imputer',SimpleImputer(strategy="median")),
+                                            ('outlier',OutlierImputationTransformation()),
+                                            ('scaler',StandardScaler()),
+                                            ('powerTransformer',PowerTransformer(method="yeo-johnson")),
+                                            ('skb', SelectKBest(f_classif, k = 10))
                                     ])
 
-            cat_pipeline = Pipeline(steps=[#("categoricalCategoryTransformation",CategoricalCategoryTransformation()),
+            cat_pipeline = Pipeline(steps=[("categoricalCategoryTransformation",CategoricalCategoryTransformation()),
                                             ('impute', SimpleImputer(strategy="most_frequent")),
-                                            ('oneHotEncoder',OneHotEncoder(handle_unknown="ignore")),
-                                           ('scaling',StandardScaler(with_mean=False))
+                                            ('oneHotEncoder',OneHotEncoder(handle_unknown="ignore",drop="first")),
+                                           ('scaling',StandardScaler(with_mean=False)),
+                                           ('skb', SelectKBest(chi2, k = 25))
                                     ])
 
             preprocessing = ColumnTransformer([('num_pipeline',num_pipeline,numerical_columns),
-                                    ('cat_pipeline',cat_pipeline,categorical_columns)])
+                                    ('cat_pipeline',cat_pipeline,categorical_columns)
+                                     ]
+                                    )
             
             return preprocessing
 
@@ -179,17 +186,27 @@ class DataTransformation:
            # trans_train_df = outlierImputationTransformation.transform(input_feature_train_df)
            # trans_test_df = outlierImputationTransformation.transform(input_feature_test_df)
 
-            logging.info(f"input_feature_train_df : {input_feature_train_df}")
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
+            # logging.info(f"input_feature_train_df : {input_feature_train_df}")
+            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df,target_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
 
-            logging.info(f"input_feature_train_arr : {input_feature_train_arr}")
 
             train_arr = np.c_[ input_feature_train_arr, np.array(target_feature_train_df)]
 
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
-            logging.info(f"input_feature_train_arr:{input_feature_train_arr}")
+
+            #train_Df_smote = pd.DataFrame(train_arr)
+
+            #smote = SMOTE(random_state = 11)
+            #X_train, y_train = smote.fit_resample(train_Df_smote.iloc[:,:-1], train_Df_smote.iloc[:,-1])
+            #train_Df_smote = pd.concat([X_train, y_train],axis=1)
+
+            #train_arr = train_Df_smote.to_numpy()
+
+            #logging.info(f"train_arr : {train_arr}")
+
+            # logging.info(f"input_feature_train_arr:{input_feature_train_arr}")
 
             train_file_path = os.path.basename(train_file_path).replace(".csv",".npz")
             test_file_path = os.path.basename(test_file_path).replace(".csv",".npz")

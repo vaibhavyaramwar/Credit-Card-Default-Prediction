@@ -9,7 +9,7 @@ import pandas as pd
 
 class CreditCardData:
 
-    def __init__(self,  id: int,limit_bal: float,sex: str,education: str,
+    def __init__(self,  limit_bal: float,sex: str,education: str,
                         marriage: str,age: int,pay_0: str,pay_2: str,
                         pay_3: str,pay_4: str,pay_5: str,
                         pay_6: str,bill_amt1: float,bill_amt2: float,
@@ -21,7 +21,6 @@ class CreditCardData:
 
                         try:
                             
-                            self.id = id
                             self.limit_bal = limit_bal
                             self.sex = sex
                             self.education= education
@@ -62,7 +61,6 @@ class CreditCardData:
         try:
             input_data = {
 
-               "id": [self.id],
                "limit_bal": [self.limit_bal],
                "sex": [self.sex],
                "education": [self.education],

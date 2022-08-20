@@ -8,5 +8,6 @@ evidently
 dill
 kaggle
 statistics
+imblearn
 import-ipynb
 -e .

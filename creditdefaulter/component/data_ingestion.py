@@ -8,6 +8,7 @@ import os,sys
 from kaggle.api.kaggle_api_extended import KaggleApi
 from sklearn.model_selection import StratifiedShuffleSplit
 import pandas as pd
+from imblearn.over_sampling import SMOTE
 
 class DataIngestion:
 
@@ -79,7 +80,7 @@ class DataIngestion:
                 is_imbalanced = False
 
       
-            split = StratifiedShuffleSplit(n_splits=1,test_size=0.2,random_state=40)
+            split = StratifiedShuffleSplit(n_splits=1,test_size=0.3,random_state=40)
             
             strat_train_df = None
             strat_test_df = None
@@ -93,6 +94,12 @@ class DataIngestion:
 
             if strat_train_df is not None:
                 os.makedirs(self.data_ingestion_config.ingested_train_dir,exist_ok=True)
+                
+                
+                smote = SMOTE(random_state=42)
+                X_train, y_train = smote.fit_resample(strat_train_df.drop(columns=TARGET_COLUMN_NAME,axis=1), strat_train_df[TARGET_COLUMN_NAME])
+                strat_train_df = pd.concat([X_train, y_train],axis=1)
+                             
                 strat_train_df.to_csv(train_file_path,index=False)
             
             if strat_test_df is not None:

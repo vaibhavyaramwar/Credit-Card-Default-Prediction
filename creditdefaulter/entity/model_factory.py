@@ -84,6 +84,8 @@ class ModelFactory:
             for key,value in property_details.items():
                 logging.info(f"Executing:$ {str(instance_ref)}.{key}={value}")
                 setattr(instance_ref,key,value)
+                weights = {0:1.0, 1:3.0}
+                setattr(instance_ref,"class_weight",weights)
 
             return instance_ref
         except Exception as e:
@@ -201,6 +203,10 @@ class ModelFactory:
         except Exception as e:
             raise Credit_Card_Default_Exception(e,sys) from e
 
+    @staticmethod
+    def to_labels(pos_probs, threshold):
+        return (pos_probs >= threshold).astype('int')
+
     def evaluate_classification_model(model_list:list,X_train:np.array,y_train:np.array, X_test:np.array,y_test:np.array,base_accuracy:float= 0.6) -> MetricInfoArtifact:
         try:
             index_number = 0
@@ -212,9 +218,14 @@ class ModelFactory:
                 logging.info(f"{'>>'*30}Started evaluating model: [{type(model).__name__}] {'<<'*30}")
                 
                 print(model,type(model))
-
+                
                 y_train_pred = model.predict(X_train)
                 y_test_pred = model.predict(X_test)
+
+                #y_train_prob = model.predict_proba(X_train)
+                #y_train_prob = y_train_prob[:,1]
+                #y_test_prob = model.predict_proba(X_test)
+                #y_test_prob = y_test_prob[:,1]
 
                 train_accuracy = accuracy_score(y_train,y_train_pred)
                 test_accuracy = accuracy_score(y_test,y_test_pred)
@@ -230,6 +241,9 @@ class ModelFactory:
 
                 f1_score_train = f1_score(y_train,y_train_pred)
                 f1_score_test = f1_score(y_test,y_test_pred)
+
+                #f1_score_train = f1_score(y_train, ModelFactory.to_labels(y_train_prob, 0.75))
+                #f1_score_test = f1_score(y_test, ModelFactory.to_labels(y_test_prob, 0.75))
 
                 roc_auc_score_train = roc_auc_score(y_train,y_train_pred)
                 roc_auc_score_test = roc_auc_score(y_test,y_test_pred)
